@@ -1,2 +1,3 @@
-# lu-msc-math-and-data-science
-University of Latvia: MSc in Mathematics and Data Science
+### University of Latvia: MSc in Mathematics and Data Science
+
+Projects, assignments, homeworks...
