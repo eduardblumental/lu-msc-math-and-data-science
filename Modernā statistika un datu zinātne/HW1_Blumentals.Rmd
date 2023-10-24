@@ -1,7 +1,18 @@
+---
+title: "HW1_Blumentals"
+output: html_document
+date: "2023-10-22"
+---
+
+# 1. mājasdarbs
+
+## 1. uzdevums
+
+### Aprakstoša statistika
+
+```{r}
 library(readxl)
 library(ggplot2)
-
-# 1. uzd.
 
 diabetes_data <- read_excel("homeworks\\data\\HW1\\diabetes.xlsx")
 
@@ -99,7 +110,7 @@ hist_viduklis_st <- ggplot(diabetes_data, aes(x=`Viduklis, cm`)) +
   xlab("Viduklis, cm") + ylab("Biežums")
 print(hist_viduklis_st)
 
-# Histogramma HbA1c ar eksponenciālo sadalījumu
+# Histogramma HbA1c ar eksponenciālo sadalījumu. Sadalījums izskātās flatter nekā vajadzētu. 
 hist_hba1c_exp <- ggplot(diabetes_data, aes(x=`HbA1c, %`)) + 
   geom_histogram(aes(y=..density..), fill="blue", color="black", alpha=0.7) + 
   stat_function(fun=dexp, args=list(rate=1/mean(diabetes_data$`HbA1c, %`, na.rm=TRUE)), 
@@ -107,16 +118,51 @@ hist_hba1c_exp <- ggplot(diabetes_data, aes(x=`HbA1c, %`)) +
   ggtitle("Histogramma: HbA1c ar eksponenciālo sadalījumu") + 
   xlab("HbA1c, %") + ylab("Biežums")
 print(hist_hba1c_exp)
+```
+
+### Zinatniska analīze
+
+Diabeta dati satur daudz informācijas par pacientiem, viņu veselības stāvokli, dzīvesveidu un citiem aspektiem. Lejā ir daži zinātniski jautājumi, ko varētu uzdot, un metodes, kuras varētu izmantot šo jautājumu atbildēšanai.
+  
+#### Pacientu demogrāfija un veselības rādītāji
+
+**Jautājumi:** 
+Vai ir kāda saistība starp dzimumu un diabēta smagumu (piemēram, HbA1c vērtības), Kāda ir saistība starp pacienta vecumu un citiem veselības rādītājiem, piemēram, asinsspiedienu vai holesterīna līmeni?
+
+**Metodes**: 
+Korelācijas analīze, t-testi, lineārās regresijas analīze
+
+#### Dzīvesveids un veselības rādītāji
+
+**Jautājumi:** 
+Vai smeķēšana ietekmē diabēta smagumu vai citus veselības rādītājus? Kā medikamentu lietošana ietekmē pacientu veselības stāvokli?
+
+**Metodes**:
+Chi-kvadrāta tests, loģistikās regresijas analīze
+
+#### Diabēta terapija un tās efektivitāte
+
+**Jautājumi:** 
+Kāda ir saistība starp insulīna devu un HbA1c vērtībām? Vai pacienti, kuri lieto noteiktus medikamentus, uzrāda labākus veselības rādītājus?
+
+**Metodes**: 
+Korelācijas analīze, t-testi
+
+#### Diabēta komplikācijas
+
+**Jautājumi:** 
+Kādi faktori palielina risku attīstīt diabēta komplikācijas, piemēram, retinopātiju vai nieru bojājumus? Kāda ir saistība starp HbA1c vērtībām un komplikāciju risku?
+
+**Metodes**: 
+Riska analīze, loģistikās regresijas analīze
+
+#### Datu struktūra un sadalījums
+
+**Jautājumi:** 
+Kādi datu sadalījumi ir tipiski šajā datu kopā? Vai ir kādas neparastas vērtības vai izņēmumi?
+
+**Metodes**: 
+Deskriptīvā statistika, vizualizācija (histogrammas, kastu grafiki), outlieru noteikšana
 
 
-
-# 2. uzd.
-
-exam_data <- read_excel("homeworks\\data\\HW1\\2021_visi_kopa_1.xlsx")
-
-
-
-
-
-
-
+## 2. uzdevums
