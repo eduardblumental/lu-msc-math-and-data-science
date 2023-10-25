@@ -207,4 +207,17 @@ print(confusion_nb)
 
 
 
+# 3. uzdevums
+lambda_1 <- 3
+lambda_2 <- 4
+lambda <- lambda_1 + lambda_2
+
+p_year <- sum(dpois(0:8, lambda))
+
+lambda_half <- lambda / 2
+p_half_year <- sum(dpois(0:8, lambda_half))
+
+print(paste("Varbūtība gadā: ", p_year))
+print(paste("Varbūtība pusgadā: ", p_half_year))
+
 

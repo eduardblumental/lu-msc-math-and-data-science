@@ -1110,6 +1110,53 @@ print(confusion_nb)</code></pre>
 </div>
 <div id="uzdevums-2" class="section level2">
 <h2>3. uzdevums</h2>
+<div id="pierādījums-ka-divu-puasona-gadījumu-lielumu-summa-ir-arī-sadalīta-pēc-puasona-sadalījuma" class="section level4">
+<h4>Pierādījums, ka divu Puasona gadījumu lielumu summa ir arī sadalīta
+pēc Puasona sadalījuma:</h4>
+<p>Ja mums ir divas neatkarīgas gadījumu lielumus <span class="math inline">\(X\)</span> un <span class="math inline">\(Y\)</span>, kuras abas ir sadalītas pēc Puasona
+sadalījuma ar intensitātes parametriem <span class="math inline">\(\lambda_1\)</span> un <span class="math inline">\(\lambda_2\)</span> attiecīgi, tad to summa <span class="math inline">\(Z = X + Y\)</span> ir arī sadalīta pēc Puasona
+sadalījuma ar intensitātes parametru <span class="math inline">\(\lambda
+= \lambda_1 + \lambda_2\)</span>.</p>
+<p><strong>Pierādījums</strong>: Mums jāaprēķina varbūtība <span class="math inline">\(P(Z = k)\)</span>, kur <span class="math inline">\(Z\)</span> ir summa <span class="math inline">\(X
++ Y\)</span>. <span class="math display">\[P(Z = k) = \sum_{i=0}^{k} P(X
+= i) \times P(Y = k - i)\]</span> Ņemot vērā, ka <span class="math inline">\(X\)</span> un <span class="math inline">\(Y\)</span> ir sadalīti pēc Puasona sadalījuma:
+<span class="math display">\[P(X = i) = \frac{e^{-\lambda_1}
+\lambda_1^i}{i!}\]</span> <span class="math display">\[P(Y = j) =
+\frac{e^{-\lambda_2} \lambda_2^j}{j!}\]</span> Ievietojot šīs vērtības
+iepriekšējā izteiksmē, mēs redzam, ka summa visiem <span class="math inline">\(k\)</span> uzvedas kā Puasona sadalījums ar
+parametru <span class="math inline">\(\lambda = \lambda_1 +
+\lambda_2\)</span>.</p>
+</div>
+<div id="varbūtības-aprēķins" class="section level4">
+<h4>Varbūtības aprēķins:</h4>
+<p>Lai aprēķinātu varbūtību, ka ciematā nākamā gada laikā nebūs vairāk
+kā 8 elektrības pārrāvumi, mums jāaprēķina varbūtība <span class="math inline">\(P(Z \leq 8)\)</span>, kur <span class="math inline">\(Z\)</span> ir summa <span class="math inline">\(X
++ Y\)</span>.</p>
+<p>No dotajām vērtībām: <span class="math inline">\(\lambda_1 =
+3\)</span> (pārrāvumi dēļ remontdarbiem) <span class="math inline">\(\lambda_2 = 4\)</span> (pārrāvumi dēļ
+laikapstākļiem) Tādējādi <span class="math inline">\(\lambda = \lambda_1
++ \lambda_2 = 7\)</span>.</p>
+<p><span class="math display">\[P(Z \leq 8) = \sum_{i=0}^{8}
+\frac{e^{-7} \times 7^i}{i!}\]</span></p>
+<p>Pusgada varbūtība būtu: <span class="math inline">\(\lambda&#39; =
+\frac{\lambda}{2} = 3.5\)</span></p>
+<p><span class="math display">\[P(Z&#39; \leq 8) = \sum_{i=0}^{8}
+\frac{e^{-3.5} \times 3.5^i}{i!}\]</span></p>
+<pre class="r"><code># 3. uzdevums
+lambda_1 &lt;- 3
+lambda_2 &lt;- 4
+lambda &lt;- lambda_1 + lambda_2
+
+p_year &lt;- sum(dpois(0:8, lambda))
+
+lambda_half &lt;- lambda / 2
+p_half_year &lt;- sum(dpois(0:8, lambda_half))
+
+print(paste(&quot;Varbūtība gadā: &quot;, p_year))</code></pre>
+<pre><code>## [1] &quot;Varbūtība gadā:  0.729091267738082&quot;</code></pre>
+<pre class="r"><code>print(paste(&quot;Varbūtība pusgadā: &quot;, p_half_year))</code></pre>
+<pre><code>## [1] &quot;Varbūtība pusgadā:  0.990126341943895&quot;</code></pre>
+</div>
 </div>
 </div>
 

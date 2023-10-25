@@ -273,3 +273,47 @@ print(confusion_nb)
 ```
 
 ## 3. uzdevums
+
+#### Pierādījums, ka divu Puasona gadījumu lielumu summa ir arī sadalīta pēc Puasona sadalījuma:
+
+Ja mums ir divas neatkarīgas gadījumu lielumus \(X\) un \(Y\), kuras abas ir sadalītas pēc Puasona sadalījuma ar intensitātes parametriem \(\lambda_1\) un \(\lambda_2\) attiecīgi, tad to summa \(Z = X + Y\) ir arī sadalīta pēc Puasona sadalījuma ar intensitātes parametru \(\lambda = \lambda_1 + \lambda_2\).
+
+**Pierādījums**:
+Mums jāaprēķina varbūtība \(P(Z = k)\), kur \(Z\) ir summa \(X + Y\). 
+\[P(Z = k) = \sum_{i=0}^{k} P(X = i) \times P(Y = k - i)\]
+Ņemot vērā, ka \(X\) un \(Y\) ir sadalīti pēc Puasona sadalījuma:
+\[P(X = i) = \frac{e^{-\lambda_1} \lambda_1^i}{i!}\]
+\[P(Y = j) = \frac{e^{-\lambda_2} \lambda_2^j}{j!}\]
+Ievietojot šīs vērtības iepriekšējā izteiksmē, mēs redzam, ka summa visiem \(k\) uzvedas kā Puasona sadalījums ar parametru \(\lambda = \lambda_1 + \lambda_2\).
+
+#### Varbūtības aprēķins:
+
+Lai aprēķinātu varbūtību, ka ciematā nākamā gada laikā nebūs vairāk kā 8 elektrības pārrāvumi, mums jāaprēķina varbūtība \(P(Z \leq 8)\), kur \(Z\) ir summa \(X + Y\).
+
+No dotajām vērtībām:
+\(\lambda_1 = 3\) (pārrāvumi dēļ remontdarbiem)
+\(\lambda_2 = 4\) (pārrāvumi dēļ laikapstākļiem)
+Tādējādi \(\lambda = \lambda_1 + \lambda_2 = 7\).
+
+\[P(Z \leq 8) = \sum_{i=0}^{8} \frac{e^{-7} \times 7^i}{i!}\]
+
+Pusgada varbūtība būtu: 
+\(\lambda' = \frac{\lambda}{2} = 3.5\)
+
+\[P(Z' \leq 8) = \sum_{i=0}^{8} \frac{e^{-3.5} \times 3.5^i}{i!}\]
+
+
+```{r}
+# 3. uzdevums
+lambda_1 <- 3
+lambda_2 <- 4
+lambda <- lambda_1 + lambda_2
+
+p_year <- sum(dpois(0:8, lambda))
+
+lambda_half <- lambda / 2
+p_half_year <- sum(dpois(0:8, lambda_half))
+
+print(paste("Varbūtība gadā: ", p_year))
+print(paste("Varbūtība pusgadā: ", p_half_year))
+```
