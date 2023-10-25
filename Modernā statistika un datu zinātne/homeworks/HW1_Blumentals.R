@@ -128,23 +128,15 @@ exam_data <- exam_data[sample(nrow(exam_data)), ]
 # Uzstādam eksāmenu tipu kā 1 vai 0 (1 - matemātikas eksāmens, 0 - citi eksāmeni)
 exam_data$IsMath <- ifelse(exam_data$Parbaudijums == "mat", 1, 0)
 
+# Pārveidojam kategoriju mainīgas par faktoriem
+exam_data$dzimums <- as.factor(exam_data$dzimums)
+exam_data$IsMath <- as.factor(exam_data$IsMath)
+
 # Sadalam datus treniņu un testēšanas kopās
 trainIndex <- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
 
 trainData <- exam_data[trainIndex, ]
 testData  <- exam_data[-trainIndex, ]
-
-# Pārveidojam IsMath par faktoru abos datu kopās
-trainData$IsMath <- as.factor(trainData$IsMath)
-testData$IsMath <- as.factor(testData$IsMath)
-
-# Pārveidojam dzimums mainīgo par faktoru
-trainData$dzimums <- as.factor(trainData$dzimums)
-testData$dzimums <- as.factor(testData$dzimums)
-
-# Pārveidojam dzimums mainīgo par faktoru
-trainData$dzimums <- as.factor(trainData$dzimums)
-testData$dzimums <- as.factor(testData$dzimums)
 
 # LDA
 lda_model <- lda(IsMath ~ Procenti + dzimums, data=trainData)
@@ -174,8 +166,11 @@ lielakas_skolas <- names(skolu_skaititajs[order(skolu_skaititajs, decreasing = T
 # Izveidot jaunu mainīgo par skolu klasi
 exam_data$SkolaKlase <- ifelse(exam_data$IzglītībasIestāde %in% lielakas_skolas, exam_data$IzglītībasIestāde, 'Citas')
 
-# Sadalam datus treniņu un testēšanas kopās
+# Pārveidojam kategoriju mainīgas par faktoriem
+exam_data$SkolaKlase <- as.factor(exam_data$SkolaKlase)
 
+# Sadalam datus treniņu un testēšanas kopās
+set.seed(777)
 trainIndex <- createDataPartition(exam_data$SkolaKlase, p = .8, list = FALSE, times = 1)
 trainData <- exam_data[trainIndex, ]
 testData  <- exam_data[-trainIndex, ]
@@ -183,18 +178,32 @@ testData  <- exam_data[-trainIndex, ]
 # Veicam LDA izmantojot izvēlētās kolonnas kā ieejas datus
 lda_model <- lda(SkolaKlase ~ IsMath + Procenti + dzimums, data=trainData)
 
+# Nodrošinām, ka prognozes klasēm ir tādi paši līmeņi kā testa datiem
+lda_pred$class <- factor(lda_pred$class, levels = levels(trainData$SkolaKlase))
+
 # Veicam prognozes izmantojot testēšanas datus
 lda_pred <- predict(lda_model, testData)
 
-# 6. Izveidojam sajaukšanas matricu un aprēķinājam precizitāti
+# Izveidojam sajaukšanas matricu un aprēķinājam precizitāti
 confusion <- confusionMatrix(lda_pred$class, testData$SkolaKlase)
 print(confusion)
 
 accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
 print(paste("Precizitāte:", round(accuracy, 3)))
 
-# 7. Komentēt rezultātus
 
+library(e1071)
+
+# Sadalam datus treniņu un testēšanas kopās
+trainIndex <- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
+trainData <- exam_data[trainIndex, ]
+testData  <- exam_data[-trainIndex, ]
+
+# Naive Bayes
+nb_model <- naiveBayes(IsMath ~ dzimums + Punkti, data=trainData)
+nb_pred <- predict(nb_model, testData)
+confusion_nb <- confusionMatrix(nb_pred, testData$IsMath)
+print(confusion_nb)
 
 
 

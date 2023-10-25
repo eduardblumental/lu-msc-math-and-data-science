@@ -167,6 +167,7 @@ Deskriptīvā statistika, vizualizācija (histogrammas, kastu grafiki), outlieru
 
 ## 2. uzdevums
 
+### LDA
 ```{r}
 # 2. uzd.
 library(caret)
@@ -212,9 +213,11 @@ print(confusion)
 # Aprēķina precizitāti
 accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
 print(paste("Precizitāte:", round(accuracy, 3)))
+```
 
 
-
+### Skolas
+```{r}
 # Skaitīt cik reizes katra skola parādās datu kopā
 skolu_skaititajs <- table(exam_data$IzglītībasIestāde)
 
@@ -250,6 +253,23 @@ accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
 print(paste("Precizitāte:", round(accuracy, 3)))
 ```
 
-### Komentārs:
+**Komentārs**:
 Sajaukšanas matricas rezultāti sniedz dažus ievērojumus. Vispārējā precizitāte ir 0,827. Tas nozīmē, ka no visiem paredzētajiem rezultātiem aptuveni 82,7% bija pareizi. Tomēr, ņemot vērā, ka visu klases modelis tiek paredzēts kā "Citas", šāda precizitāte nav tik augsta, kā varētu šķist. Vēl viens svarīgs rādītājs ir Kappa statistika, kas šajā gadījumā ir 0. Vērtība 0 norāda, ka modelis neparedz labāk nekā nejaušība. Ja mēs pievēršamies atsevišķām klasēm, redzam, ka visām klasēm, izņemot "Citas", sensitivitāte ir 0. Tas nozīmē, ka modelis nav spējīgs pareizi identificēt nevienu no šīm klasēm. Tāpēc, lai gan kopējā precizitāte šķiet augsta, modelis faktiski nespēj pareizi klasificēt lielāko daļu skolu, kuras jūs mēģināt prognozēt. Tas ir diezgan logiski, jo nekādas ekonomiskas sakarības starp skolam, dzimumiem un eksāmenu rezultātiem nav.
 
+### Naive Bayes
+```{r}
+library(e1071)
+
+# Sadalam datus treniņu un testēšanas kopās
+trainIndex <- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
+trainData <- exam_data[trainIndex, ]
+testData  <- exam_data[-trainIndex, ]
+
+# Naive Bayes
+nb_model <- naiveBayes(IsMath ~ dzimums + Punkti, data=trainData)
+nb_pred <- predict(nb_model, testData)
+confusion_nb <- confusionMatrix(nb_pred, testData$IsMath)
+print(confusion_nb)
+```
+
+## 3. uzdevums

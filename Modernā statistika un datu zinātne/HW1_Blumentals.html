@@ -364,10 +364,9 @@ display: none;
 <pre class="r"><code>library(readxl)
 library(ggplot2)
 
-# Izlasām datus no Excel faila
 diabetes_data &lt;- read_excel(&quot;homeworks\\data\\HW1\\diabetes.xlsx&quot;)
 
-# Aprakstīt datus, kādi ir datu veidi/tipi
+# Datus veidi/tipi
 str(diabetes_data)</code></pre>
 <pre><code>## tibble [107 × 44] (S3: tbl_df/tbl/data.frame)
 ##  $ Dzimšanas dati                                                     : POSIXct[1:107], format: &quot;1992-03-08&quot; &quot;1968-07-24&quot; ...
@@ -644,44 +643,473 @@ jautājumi, ko varētu uzdot, un metodes, kuras varētu izmantot šo
 jautājumu atbildēšanai.</p>
 <div id="pacientu-demogrāfija-un-veselības-rādītāji" class="section level4">
 <h4>Pacientu demogrāfija un veselības rādītāji</h4>
-<p><strong>Jautājumi:</strong> - Vai ir kāda saistība starp dzimumu un
-diabēta smagumu (piemēram, HbA1c vērtības)? - Kāda ir saistība starp
+<p><strong>Jautājumi:</strong> Vai ir kāda saistība starp dzimumu un
+diabēta smagumu (piemēram, HbA1c vērtības), Kāda ir saistība starp
 pacienta vecumu un citiem veselības rādītājiem, piemēram, asinsspiedienu
 vai holesterīna līmeni?</p>
-<p><strong>Metodes</strong>: - Korelācijas analīze - t-testi - Lineārās
+<p><strong>Metodes</strong>: Korelācijas analīze, t-testi, lineārās
 regresijas analīze</p>
 </div>
 <div id="dzīvesveids-un-veselības-rādītāji" class="section level4">
 <h4>Dzīvesveids un veselības rādītāji</h4>
-<p><strong>Jautājumi:</strong> - Vai smeķēšana ietekmē diabēta smagumu
-vai citus veselības rādītājus? - Kā medikamentu lietošana ietekmē
-pacientu veselības stāvokli?</p>
-<p><strong>Metodes</strong>: - Chi-kvadrāta tests - Loģistikās
-regresijas analīze</p>
+<p><strong>Jautājumi:</strong> Vai smeķēšana ietekmē diabēta smagumu vai
+citus veselības rādītājus? Kā medikamentu lietošana ietekmē pacientu
+veselības stāvokli?</p>
+<p><strong>Metodes</strong>: Chi-kvadrāta tests, loģistikās regresijas
+analīze</p>
 </div>
 <div id="diabēta-terapija-un-tās-efektivitāte" class="section level4">
 <h4>Diabēta terapija un tās efektivitāte</h4>
-<p><strong>Jautājumi:</strong> - Kāda ir saistība starp insulīna devu un
-HbA1c vērtībām? - Vai pacienti, kuri lieto noteiktus medikamentus,
-uzrāda labākus veselības rādītājus?</p>
-<p><strong>Metodes</strong>: - Korelācijas analīze - t-testi</p>
+<p><strong>Jautājumi:</strong> Kāda ir saistība starp insulīna devu un
+HbA1c vērtībām? Vai pacienti, kuri lieto noteiktus medikamentus, uzrāda
+labākus veselības rādītājus?</p>
+<p><strong>Metodes</strong>: Korelācijas analīze, t-testi</p>
 </div>
 <div id="diabēta-komplikācijas" class="section level4">
 <h4>Diabēta komplikācijas</h4>
-<p><strong>Jautājumi:</strong> - Kādi faktori palielina risku attīstīt
-diabēta komplikācijas, piemēram, retinopātiju vai nieru bojājumus? -
-Kāda ir saistība starp HbA1c vērtībām un komplikāciju risku?</p>
-<p><strong>Metodes</strong>: - Riska analīze - Loģistikās regresijas
+<p><strong>Jautājumi:</strong> Kādi faktori palielina risku attīstīt
+diabēta komplikācijas, piemēram, retinopātiju vai nieru bojājumus? Kāda
+ir saistība starp HbA1c vērtībām un komplikāciju risku?</p>
+<p><strong>Metodes</strong>: Riska analīze, loģistikās regresijas
 analīze</p>
 </div>
 <div id="datu-struktūra-un-sadalījums" class="section level4">
 <h4>Datu struktūra un sadalījums</h4>
-<p><strong>Jautājumi:</strong> - Kādi datu sadalījumi ir tipiski šajā
-datu kopā? - Vai ir kādas neparastas vērtības vai izņēmumi?</p>
-<p><strong>Metodes</strong>: - Deskriptīvā statistika - Vizualizācija
-(histogrammas, kastu grafikus) - Outlieru noteikšana</p>
+<p><strong>Jautājumi:</strong> Kādi datu sadalījumi ir tipiski šajā datu
+kopā? Vai ir kādas neparastas vērtības vai izņēmumi?</p>
+<p><strong>Metodes</strong>: Deskriptīvā statistika, vizualizācija
+(histogrammas, kastu grafiki), outlieru noteikšana</p>
 </div>
 </div>
+</div>
+<div id="uzdevums-1" class="section level2">
+<h2>2. uzdevums</h2>
+<div id="lda" class="section level3">
+<h3>LDA</h3>
+<pre class="r"><code># 2. uzd.
+library(caret)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre class="r"><code>library(MASS)
+
+# Ielādējam datus
+exam_data &lt;- read_excel(&quot;homeworks\\data\\HW1\\2021_visi_kopa_1.xlsx&quot;)</code></pre>
+<pre><code>## Warning: Expecting numeric in E1933 / R1933C5: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in F1933 / R1933C6: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in E2457 / R2457C5: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in F5035 / R5035C6: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in F6125 / R6125C6: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in F6659 / R6659C6: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in F7449 / R7449C6: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in F12747 / R12747C6: got &#39;atbr.&#39;</code></pre>
+<pre><code>## Warning: Expecting numeric in G27589 / R27589C7: got &#39;atbr.&#39;</code></pre>
+<pre class="r"><code># Notīram rindiņas, kurās ir vārds &quot;atbr.&quot;
+exam_data &lt;- exam_data[!apply(exam_data, 1, function(row) any(grepl(&quot;atbr.&quot;, row))), ]
+
+set.seed(777)
+
+# Sajaucam datus
+exam_data &lt;- exam_data[sample(nrow(exam_data)), ]
+
+# Uzstādam eksāmenu tipu kā 1 vai 0 (1 - matemātikas eksāmens, 0 - citi eksāmeni)
+exam_data$IsMath &lt;- ifelse(exam_data$Parbaudijums == &quot;mat&quot;, 1, 0)
+
+# Pārveidojam kategoriju mainīgas par faktoriem
+exam_data$dzimums &lt;- as.factor(exam_data$dzimums)
+exam_data$IsMath &lt;- as.factor(exam_data$IsMath)
+
+# Sadalam datus treniņu un testēšanas kopās
+trainIndex &lt;- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
+
+trainData &lt;- exam_data[trainIndex, ]
+testData  &lt;- exam_data[-trainIndex, ]
+
+# LDA
+lda_model &lt;- lda(IsMath ~ Procenti + dzimums, data=trainData)
+
+# Veic prognozes izmantojot testēšanas datus
+lda_pred &lt;- predict(lda_model, testData)
+
+# Nodrošinām, ka prognozēšanas un faktiskajiem testa datiem ir vienādi līmeņi
+levels(lda_pred$class) &lt;- levels(testData$IsMath)
+
+# Izveido sajaukšanas matricu
+confusion &lt;- confusionMatrix(lda_pred$class, testData$IsMath)
+print(confusion)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    0    1
+##          0 6292 1572
+##          1  662 1388
+##                                           
+##                Accuracy : 0.7747          
+##                  95% CI : (0.7663, 0.7829)
+##     No Information Rate : 0.7014          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.4099          
+##                                           
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
+##                                           
+##             Sensitivity : 0.9048          
+##             Specificity : 0.4689          
+##          Pos Pred Value : 0.8001          
+##          Neg Pred Value : 0.6771          
+##              Prevalence : 0.7014          
+##          Detection Rate : 0.6347          
+##    Detection Prevalence : 0.7932          
+##       Balanced Accuracy : 0.6869          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+<pre class="r"><code># Aprēķina precizitāti
+accuracy &lt;- sum(diag(confusion$table)) / sum(confusion$table)
+print(paste(&quot;Precizitāte:&quot;, round(accuracy, 3)))</code></pre>
+<pre><code>## [1] &quot;Precizitāte: 0.775&quot;</code></pre>
+</div>
+<div id="skolas" class="section level3">
+<h3>Skolas</h3>
+<pre class="r"><code># Skaitīt cik reizes katra skola parādās datu kopā
+skolu_skaititajs &lt;- table(exam_data$IzglītībasIestāde)
+
+# Izvēlēties lielākās skolas (piemēram, top 10)
+lielakas_skolas &lt;- names(skolu_skaititajs[order(skolu_skaititajs, decreasing = TRUE)][1:10])
+
+# Izveidot jaunu mainīgo par skolu klasi
+exam_data$SkolaKlase &lt;- ifelse(exam_data$IzglītībasIestāde %in% lielakas_skolas, exam_data$IzglītībasIestāde, &#39;Citas&#39;)
+
+# Pārveidojam kategoriju mainīgas par faktoriem
+exam_data$SkolaKlase &lt;- as.factor(exam_data$SkolaKlase)
+
+# Sadalam datus treniņu un testēšanas kopās
+set.seed(777)
+trainIndex &lt;- createDataPartition(exam_data$SkolaKlase, p = .8, list = FALSE, times = 1)
+trainData &lt;- exam_data[trainIndex, ]
+testData  &lt;- exam_data[-trainIndex, ]
+
+# Veicam LDA izmantojot izvēlētās kolonnas kā ieejas datus
+lda_model &lt;- lda(SkolaKlase ~ IsMath + Procenti + dzimums, data=trainData)
+
+# Nodrošinām, ka prognozes klasēm ir tādi paši līmeņi kā testa datiem
+lda_pred$class &lt;- factor(lda_pred$class, levels = levels(trainData$SkolaKlase))
+
+# Veicam prognozes izmantojot testēšanas datus
+lda_pred &lt;- predict(lda_model, testData)
+
+# Izveidojam sajaukšanas matricu un aprēķinājam precizitāti
+confusion &lt;- confusionMatrix(lda_pred$class, testData$SkolaKlase)
+print(confusion)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                                                                                                     Reference
+## Prediction                                                                                           Citas
+##   Citas                                                                                               8199
+##   Jelgavas Tehnikums (prof.)                                                                             0
+##   Ogres tehnikums (prof.)                                                                                0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                        0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                   0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                           0
+##   Rīgas 1. Tālmācības vidusskola                                                                         0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                              0
+##   Rīgas Tālmācības vidusskola                                                                            0
+##   Rīgas Valsts 1. ģimnāzija                                                                              0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)     0
+##                                                                                                     Reference
+## Prediction                                                                                           Jelgavas Tehnikums (prof.)
+##   Citas                                                                                                                     143
+##   Jelgavas Tehnikums (prof.)                                                                                                  0
+##   Ogres tehnikums (prof.)                                                                                                     0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                             0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                        0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                0
+##   Rīgas 1. Tālmācības vidusskola                                                                                              0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                   0
+##   Rīgas Tālmācības vidusskola                                                                                                 0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                   0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                          0
+##                                                                                                     Reference
+## Prediction                                                                                           Ogres tehnikums (prof.)
+##   Citas                                                                                                                  147
+##   Jelgavas Tehnikums (prof.)                                                                                               0
+##   Ogres tehnikums (prof.)                                                                                                  0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                          0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                     0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                             0
+##   Rīgas 1. Tālmācības vidusskola                                                                                           0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                0
+##   Rīgas Tālmācības vidusskola                                                                                              0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                       0
+##                                                                                                     Reference
+## Prediction                                                                                           Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)
+##   Citas                                                                                                                                                                          148
+##   Jelgavas Tehnikums (prof.)                                                                                                                                                       0
+##   Ogres tehnikums (prof.)                                                                                                                                                          0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                                                                                  0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                                                                             0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                                                                     0
+##   Rīgas 1. Tālmācības vidusskola                                                                                                                                                   0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                                                                        0
+##   Rīgas Tālmācības vidusskola                                                                                                                                                      0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                                                                        0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                                                                               0
+##                                                                                                     Reference
+## Prediction                                                                                           Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;
+##   Citas                                                                                                                                                               176
+##   Jelgavas Tehnikums (prof.)                                                                                                                                            0
+##   Ogres tehnikums (prof.)                                                                                                                                               0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                                                                       0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                                                                  0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                                                          0
+##   Rīgas 1. Tālmācības vidusskola                                                                                                                                        0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                                                             0
+##   Rīgas Tālmācības vidusskola                                                                                                                                           0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                                                             0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                                                                    0
+##                                                                                                     Reference
+## Prediction                                                                                           Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)
+##   Citas                                                                                                                                                                       308
+##   Jelgavas Tehnikums (prof.)                                                                                                                                                    0
+##   Ogres tehnikums (prof.)                                                                                                                                                       0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                                                                               0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                                                                          0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                                                                  0
+##   Rīgas 1. Tālmācības vidusskola                                                                                                                                                0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                                                                     0
+##   Rīgas Tālmācības vidusskola                                                                                                                                                   0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                                                                     0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                                                                            0
+##                                                                                                     Reference
+## Prediction                                                                                           Rīgas 1. Tālmācības vidusskola
+##   Citas                                                                                                                         229
+##   Jelgavas Tehnikums (prof.)                                                                                                      0
+##   Ogres tehnikums (prof.)                                                                                                         0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                                 0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                            0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                    0
+##   Rīgas 1. Tālmācības vidusskola                                                                                                  0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                       0
+##   Rīgas Tālmācības vidusskola                                                                                                     0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                       0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                              0
+##                                                                                                     Reference
+## Prediction                                                                                           Rīgas Mākslas un mediju tehnikums (prof.)
+##   Citas                                                                                                                                    124
+##   Jelgavas Tehnikums (prof.)                                                                                                                 0
+##   Ogres tehnikums (prof.)                                                                                                                    0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                                            0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                                       0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                               0
+##   Rīgas 1. Tālmācības vidusskola                                                                                                             0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                                  0
+##   Rīgas Tālmācības vidusskola                                                                                                                0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                                  0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                                         0
+##                                                                                                     Reference
+## Prediction                                                                                           Rīgas Tālmācības vidusskola
+##   Citas                                                                                                                      114
+##   Jelgavas Tehnikums (prof.)                                                                                                   0
+##   Ogres tehnikums (prof.)                                                                                                      0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                              0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                         0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                 0
+##   Rīgas 1. Tālmācības vidusskola                                                                                               0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                    0
+##   Rīgas Tālmācības vidusskola                                                                                                  0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                    0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                           0
+##                                                                                                     Reference
+## Prediction                                                                                           Rīgas Valsts 1. ģimnāzija
+##   Citas                                                                                                                    159
+##   Jelgavas Tehnikums (prof.)                                                                                                 0
+##   Ogres tehnikums (prof.)                                                                                                    0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                            0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                       0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                               0
+##   Rīgas 1. Tālmācības vidusskola                                                                                             0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                  0
+##   Rīgas Tālmācības vidusskola                                                                                                0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                  0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                         0
+##                                                                                                     Reference
+## Prediction                                                                                           Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)
+##   Citas                                                                                                                                                                                             162
+##   Jelgavas Tehnikums (prof.)                                                                                                                                                                          0
+##   Ogres tehnikums (prof.)                                                                                                                                                                             0
+##   Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)                                                                                                                     0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;                                                                                                                                0
+##   Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)                                                                                                                        0
+##   Rīgas 1. Tālmācības vidusskola                                                                                                                                                                      0
+##   Rīgas Mākslas un mediju tehnikums (prof.)                                                                                                                                                           0
+##   Rīgas Tālmācības vidusskola                                                                                                                                                                         0
+##   Rīgas Valsts 1. ģimnāzija                                                                                                                                                                           0
+##   Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)                                                                                                  0
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.8274          
+##                  95% CI : (0.8198, 0.8348)
+##     No Information Rate : 0.8274          
+##     P-Value [Acc &gt; NIR] : 0.5065          
+##                                           
+##                   Kappa : 0               
+##                                           
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: Citas Class: Jelgavas Tehnikums (prof.)
+## Sensitivity                1.0000                           0.00000
+## Specificity                0.0000                           1.00000
+## Pos Pred Value             0.8274                               NaN
+## Neg Pred Value                NaN                           0.98557
+## Prevalence                 0.8274                           0.01443
+## Detection Rate             0.8274                           0.00000
+## Detection Prevalence       1.0000                           0.00000
+## Balanced Accuracy          0.5000                           0.50000
+##                      Class: Ogres tehnikums (prof.)
+## Sensitivity                                 0.00000
+## Specificity                                 1.00000
+## Pos Pred Value                                  NaN
+## Neg Pred Value                              0.98517
+## Prevalence                                  0.01483
+## Detection Rate                              0.00000
+## Detection Prevalence                        0.00000
+## Balanced Accuracy                           0.50000
+##                      Class: Profesionālās izglītības kompetences centrs &quot;Liepājas Valsts tehnikums&quot; (prof.)
+## Sensitivity                                                                                         0.00000
+## Specificity                                                                                         1.00000
+## Pos Pred Value                                                                                          NaN
+## Neg Pred Value                                                                                      0.98506
+## Prevalence                                                                                          0.01494
+## Detection Rate                                                                                      0.00000
+## Detection Prevalence                                                                                0.00000
+## Balanced Accuracy                                                                                   0.50000
+##                      Class: Profesionālās izglītības kompetences centrs &quot;Rīgas Tehniskā koledža&quot;
+## Sensitivity                                                                              0.00000
+## Specificity                                                                              1.00000
+## Pos Pred Value                                                                               NaN
+## Neg Pred Value                                                                           0.98224
+## Prevalence                                                                               0.01776
+## Detection Rate                                                                           0.00000
+## Detection Prevalence                                                                     0.00000
+## Balanced Accuracy                                                                        0.50000
+##                      Class: Profesionālās izglītības kompetences centrs &quot;Rīgas Valsts tehnikums&quot; (prof.)
+## Sensitivity                                                                                      0.00000
+## Specificity                                                                                      1.00000
+## Pos Pred Value                                                                                       NaN
+## Neg Pred Value                                                                                   0.96892
+## Prevalence                                                                                       0.03108
+## Detection Rate                                                                                   0.00000
+## Detection Prevalence                                                                             0.00000
+## Balanced Accuracy                                                                                0.50000
+##                      Class: Rīgas 1. Tālmācības vidusskola
+## Sensitivity                                        0.00000
+## Specificity                                        1.00000
+## Pos Pred Value                                         NaN
+## Neg Pred Value                                     0.97689
+## Prevalence                                         0.02311
+## Detection Rate                                     0.00000
+## Detection Prevalence                               0.00000
+## Balanced Accuracy                                  0.50000
+##                      Class: Rīgas Mākslas un mediju tehnikums (prof.)
+## Sensitivity                                                   0.00000
+## Specificity                                                   1.00000
+## Pos Pred Value                                                    NaN
+## Neg Pred Value                                                0.98749
+## Prevalence                                                    0.01251
+## Detection Rate                                                0.00000
+## Detection Prevalence                                          0.00000
+## Balanced Accuracy                                             0.50000
+##                      Class: Rīgas Tālmācības vidusskola
+## Sensitivity                                      0.0000
+## Specificity                                      1.0000
+## Pos Pred Value                                      NaN
+## Neg Pred Value                                   0.9885
+## Prevalence                                       0.0115
+## Detection Rate                                   0.0000
+## Detection Prevalence                             0.0000
+## Balanced Accuracy                                0.5000
+##                      Class: Rīgas Valsts 1. ģimnāzija
+## Sensitivity                                   0.00000
+## Specificity                                   1.00000
+## Pos Pred Value                                    NaN
+## Neg Pred Value                                0.98395
+## Prevalence                                    0.01605
+## Detection Rate                                0.00000
+## Detection Prevalence                          0.00000
+## Balanced Accuracy                             0.50000
+##                      Class: Valsts sabiedrība ar ierobežotu atbildību &quot;Rīgas Tūrisma un radošās industrijas tehnikums&quot; (prof.)
+## Sensitivity                                                                                                            0.00000
+## Specificity                                                                                                            1.00000
+## Pos Pred Value                                                                                                             NaN
+## Neg Pred Value                                                                                                         0.98365
+## Prevalence                                                                                                             0.01635
+## Detection Rate                                                                                                         0.00000
+## Detection Prevalence                                                                                                   0.00000
+## Balanced Accuracy                                                                                                      0.50000</code></pre>
+<pre class="r"><code>accuracy &lt;- sum(diag(confusion$table)) / sum(confusion$table)
+print(paste(&quot;Precizitāte:&quot;, round(accuracy, 3)))</code></pre>
+<pre><code>## [1] &quot;Precizitāte: 0.827&quot;</code></pre>
+<p><strong>Komentārs</strong>: Sajaukšanas matricas rezultāti sniedz
+dažus ievērojumus. Vispārējā precizitāte ir 0,827. Tas nozīmē, ka no
+visiem paredzētajiem rezultātiem aptuveni 82,7% bija pareizi. Tomēr,
+ņemot vērā, ka visu klases modelis tiek paredzēts kā “Citas”, šāda
+precizitāte nav tik augsta, kā varētu šķist. Vēl viens svarīgs rādītājs
+ir Kappa statistika, kas šajā gadījumā ir 0. Vērtība 0 norāda, ka
+modelis neparedz labāk nekā nejaušība. Ja mēs pievēršamies atsevišķām
+klasēm, redzam, ka visām klasēm, izņemot “Citas”, sensitivitāte ir 0.
+Tas nozīmē, ka modelis nav spējīgs pareizi identificēt nevienu no šīm
+klasēm. Tāpēc, lai gan kopējā precizitāte šķiet augsta, modelis faktiski
+nespēj pareizi klasificēt lielāko daļu skolu, kuras jūs mēģināt
+prognozēt. Tas ir diezgan logiski, jo nekādas ekonomiskas sakarības
+starp skolam, dzimumiem un eksāmenu rezultātiem nav.</p>
+</div>
+<div id="naive-bayes" class="section level3">
+<h3>Naive Bayes</h3>
+<pre class="r"><code>library(e1071)
+
+# Sadalam datus treniņu un testēšanas kopās
+trainIndex &lt;- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
+trainData &lt;- exam_data[trainIndex, ]
+testData  &lt;- exam_data[-trainIndex, ]
+
+# Naive Bayes
+nb_model &lt;- naiveBayes(IsMath ~ dzimums + Punkti, data=trainData)
+nb_pred &lt;- predict(nb_model, testData)
+confusion_nb &lt;- confusionMatrix(nb_pred, testData$IsMath)
+print(confusion_nb)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    0    1
+##          0 5703  824
+##          1 1251 2136
+##                                           
+##                Accuracy : 0.7907          
+##                  95% CI : (0.7826, 0.7987)
+##     No Information Rate : 0.7014          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.5202          
+##                                           
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
+##                                           
+##             Sensitivity : 0.8201          
+##             Specificity : 0.7216          
+##          Pos Pred Value : 0.8738          
+##          Neg Pred Value : 0.6306          
+##              Prevalence : 0.7014          
+##          Detection Rate : 0.5752          
+##    Detection Prevalence : 0.6584          
+##       Balanced Accuracy : 0.7709          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+</div>
+</div>
+<div id="uzdevums-2" class="section level2">
+<h2>3. uzdevums</h2>
 </div>
 </div>
 
