@@ -166,3 +166,90 @@ Deskriptīvā statistika, vizualizācija (histogrammas, kastu grafiki), outlieru
 
 
 ## 2. uzdevums
+
+```{r}
+# 2. uzd.
+library(caret)
+library(MASS)
+
+# Ielādējam datus
+exam_data <- read_excel("homeworks\\data\\HW1\\2021_visi_kopa_1.xlsx")
+
+# Notīram rindiņas, kurās ir vārds "atbr."
+exam_data <- exam_data[!apply(exam_data, 1, function(row) any(grepl("atbr.", row))), ]
+
+set.seed(777)
+
+# Sajaucam datus
+exam_data <- exam_data[sample(nrow(exam_data)), ]
+
+# Uzstādam eksāmenu tipu kā 1 vai 0 (1 - matemātikas eksāmens, 0 - citi eksāmeni)
+exam_data$IsMath <- ifelse(exam_data$Parbaudijums == "mat", 1, 0)
+
+# Pārveidojam kategoriju mainīgas par faktoriem
+exam_data$dzimums <- as.factor(exam_data$dzimums)
+exam_data$IsMath <- as.factor(exam_data$IsMath)
+
+# Sadalam datus treniņu un testēšanas kopās
+trainIndex <- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
+
+trainData <- exam_data[trainIndex, ]
+testData  <- exam_data[-trainIndex, ]
+
+# LDA
+lda_model <- lda(IsMath ~ Procenti + dzimums, data=trainData)
+
+# Veic prognozes izmantojot testēšanas datus
+lda_pred <- predict(lda_model, testData)
+
+# Nodrošinām, ka prognozēšanas un faktiskajiem testa datiem ir vienādi līmeņi
+levels(lda_pred$class) <- levels(testData$IsMath)
+
+# Izveido sajaukšanas matricu
+confusion <- confusionMatrix(lda_pred$class, testData$IsMath)
+print(confusion)
+
+# Aprēķina precizitāti
+accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
+print(paste("Precizitāte:", round(accuracy, 3)))
+
+
+
+# Skaitīt cik reizes katra skola parādās datu kopā
+skolu_skaititajs <- table(exam_data$IzglītībasIestāde)
+
+# Izvēlēties lielākās skolas (piemēram, top 10)
+lielakas_skolas <- names(skolu_skaititajs[order(skolu_skaititajs, decreasing = TRUE)][1:10])
+
+# Izveidot jaunu mainīgo par skolu klasi
+exam_data$SkolaKlase <- ifelse(exam_data$IzglītībasIestāde %in% lielakas_skolas, exam_data$IzglītībasIestāde, 'Citas')
+
+# Pārveidojam kategoriju mainīgas par faktoriem
+exam_data$SkolaKlase <- as.factor(exam_data$SkolaKlase)
+
+# Sadalam datus treniņu un testēšanas kopās
+set.seed(777)
+trainIndex <- createDataPartition(exam_data$SkolaKlase, p = .8, list = FALSE, times = 1)
+trainData <- exam_data[trainIndex, ]
+testData  <- exam_data[-trainIndex, ]
+
+# Veicam LDA izmantojot izvēlētās kolonnas kā ieejas datus
+lda_model <- lda(SkolaKlase ~ IsMath + Procenti + dzimums, data=trainData)
+
+# Nodrošinām, ka prognozes klasēm ir tādi paši līmeņi kā testa datiem
+lda_pred$class <- factor(lda_pred$class, levels = levels(trainData$SkolaKlase))
+
+# Veicam prognozes izmantojot testēšanas datus
+lda_pred <- predict(lda_model, testData)
+
+# Izveidojam sajaukšanas matricu un aprēķinājam precizitāti
+confusion <- confusionMatrix(lda_pred$class, testData$SkolaKlase)
+print(confusion)
+
+accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
+print(paste("Precizitāte:", round(accuracy, 3)))
+```
+
+### Komentārs:
+Sajaukšanas matricas rezultāti sniedz dažus ievērojumus. Vispārējā precizitāte ir 0,827. Tas nozīmē, ka no visiem paredzētajiem rezultātiem aptuveni 82,7% bija pareizi. Tomēr, ņemot vērā, ka visu klases modelis tiek paredzēts kā "Citas", šāda precizitāte nav tik augsta, kā varētu šķist. Vēl viens svarīgs rādītājs ir Kappa statistika, kas šajā gadījumā ir 0. Vērtība 0 norāda, ka modelis neparedz labāk nekā nejaušība. Ja mēs pievēršamies atsevišķām klasēm, redzam, ka visām klasēm, izņemot "Citas", sensitivitāte ir 0. Tas nozīmē, ka modelis nav spējīgs pareizi identificēt nevienu no šīm klasēm. Tāpēc, lai gan kopējā precizitāte šķiet augsta, modelis faktiski nespēj pareizi klasificēt lielāko daļu skolu, kuras jūs mēģināt prognozēt. Tas ir diezgan logiski, jo nekādas ekonomiskas sakarības starp skolam, dzimumiem un eksāmenu rezultātiem nav.
+

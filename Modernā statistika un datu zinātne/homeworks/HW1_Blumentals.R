@@ -111,10 +111,89 @@ print(hist_hba1c_exp)
 
 
 # 2. uzd.
+library(caret)
+library(MASS)
 
+# Ielādējam datus
 exam_data <- read_excel("homeworks\\data\\HW1\\2021_visi_kopa_1.xlsx")
 
+# Notīram rindiņas, kurās ir vārds "atbr."
+exam_data <- exam_data[!apply(exam_data, 1, function(row) any(grepl("atbr.", row))), ]
 
+set.seed(777)
+
+# Sajaucam datus
+exam_data <- exam_data[sample(nrow(exam_data)), ]
+
+# Uzstādam eksāmenu tipu kā 1 vai 0 (1 - matemātikas eksāmens, 0 - citi eksāmeni)
+exam_data$IsMath <- ifelse(exam_data$Parbaudijums == "mat", 1, 0)
+
+# Sadalam datus treniņu un testēšanas kopās
+trainIndex <- createDataPartition(exam_data$IsMath, p = .8, list = FALSE, times = 1)
+
+trainData <- exam_data[trainIndex, ]
+testData  <- exam_data[-trainIndex, ]
+
+# Pārveidojam IsMath par faktoru abos datu kopās
+trainData$IsMath <- as.factor(trainData$IsMath)
+testData$IsMath <- as.factor(testData$IsMath)
+
+# Pārveidojam dzimums mainīgo par faktoru
+trainData$dzimums <- as.factor(trainData$dzimums)
+testData$dzimums <- as.factor(testData$dzimums)
+
+# Pārveidojam dzimums mainīgo par faktoru
+trainData$dzimums <- as.factor(trainData$dzimums)
+testData$dzimums <- as.factor(testData$dzimums)
+
+# LDA
+lda_model <- lda(IsMath ~ Procenti + dzimums, data=trainData)
+
+# Veic prognozes izmantojot testēšanas datus
+lda_pred <- predict(lda_model, testData)
+
+# Nodrošinām, ka prognozēšanas un faktiskajiem testa datiem ir vienādi līmeņi
+levels(lda_pred$class) <- levels(testData$IsMath)
+
+# Izveido sajaukšanas matricu
+confusion <- confusionMatrix(lda_pred$class, testData$IsMath)
+print(confusion)
+
+# Aprēķina precizitāti
+accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
+print(paste("Precizitāte:", round(accuracy, 3)))
+
+
+
+# Skaitīt cik reizes katra skola parādās datu kopā
+skolu_skaititajs <- table(exam_data$IzglītībasIestāde)
+
+# Izvēlēties lielākās skolas (piemēram, top 10)
+lielakas_skolas <- names(skolu_skaititajs[order(skolu_skaititajs, decreasing = TRUE)][1:10])
+
+# Izveidot jaunu mainīgo par skolu klasi
+exam_data$SkolaKlase <- ifelse(exam_data$IzglītībasIestāde %in% lielakas_skolas, exam_data$IzglītībasIestāde, 'Citas')
+
+# Sadalam datus treniņu un testēšanas kopās
+
+trainIndex <- createDataPartition(exam_data$SkolaKlase, p = .8, list = FALSE, times = 1)
+trainData <- exam_data[trainIndex, ]
+testData  <- exam_data[-trainIndex, ]
+
+# Veicam LDA izmantojot izvēlētās kolonnas kā ieejas datus
+lda_model <- lda(SkolaKlase ~ IsMath + Procenti + dzimums, data=trainData)
+
+# Veicam prognozes izmantojot testēšanas datus
+lda_pred <- predict(lda_model, testData)
+
+# 6. Izveidojam sajaukšanas matricu un aprēķinājam precizitāti
+confusion <- confusionMatrix(lda_pred$class, testData$SkolaKlase)
+print(confusion)
+
+accuracy <- sum(diag(confusion$table)) / sum(confusion$table)
+print(paste("Precizitāte:", round(accuracy, 3)))
+
+# 7. Komentēt rezultātus
 
 
 
